@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexwayne Bio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        :root {
+            --bg-outer: #121212;
+            --window-bg: #2a2827;
+            --accent-blue: #5bc4ed;
+            --panel-brown: #c48259;
+            --panel-light: #e6b291;
+            --text-light: #f5f5f5;
+            --text-dark: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-outer);
+            color: var(--accent-blue);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .browser-window {
+            background-color: var(--window-bg);
+            width: 100%;
+            max-width: 920px;
+            border: 2px solid var(--panel-brown);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(91, 196, 237, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: var(--window-bg);
+            padding: 10px 10px 0;
+            border-bottom: 2px solid var(--panel-brown);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .tab {
+            background-color: var(--bg-outer);
+            color: var(--panel-brown);
+            padding: 8px 15px;
+            margin-right: 5px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            border: 2px solid transparent;
+            border-bottom: none;
+            font-size: 0.9rem;
+            width: 140px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .tab.active {
+            background-color: var(--panel-brown);
+            color: var(--text-dark);
+            border-color: var(--panel-brown);
+        }
+
+        .window-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding-right: 5px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-light);
+        }
+        .dot:nth-child(2) { background-color: var(--panel-light); }
+        .dot:nth-child(3) { background-color: var(--panel-brown); }
+
+        .address-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--bg-outer);
+            border-bottom: 2px solid var(--panel-brown);
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            color: var(--text-light);
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .url-input {
+            flex-grow: 1;
+            background-color: var(--window-bg);
+            border: 1px solid var(--panel-brown);
+            color: var(--accent-blue);
+            padding: 5px 10px;
+            font-family: inherit;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            min-width: 0;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .content {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .main-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            height: 100%;
+        }
+
+        .main-info h1 {
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 2rem;
+        }
+
+        .main-info p {
+            color: var(--text-light);
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            background-color: var(--panel-brown);
+            color: var(--text-dark);
+            border: none;
+            padding: 9px 11px;
+            text-align: left;
+            text-decoration: none;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .btn i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--panel-light);
+        }
+
+        .side-img-top {
+            background-color: var(--bg-outer);
+            border: 2px solid var(--panel-brown);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .side-img-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bottom-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 15px;
+        }
+
+        .side-img-bottom {
+            background-color: var(--bg-outer);
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            z-index: 1;
+            min-height: 120px;
+        }
+
+        .side-img-bottom::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(18, 18, 18, 0.75);
+            z-index: -1;
+        }
+
+        .about-panel {
+            background-color: var(--window-bg);
+            border: 2px solid var(--panel-brown);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .about-header {
+            background-color: var(--panel-brown);
+            color: var(--text-dark);
+            padding: 5px 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .about-text {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btns .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-black {
+            background-color: var(--bg-outer);
+            color: var(--text-light);
+            border: 1px solid var(--panel-brown);
+        }
+        .btn-black:hover {
+            background-color: var(--text-dark);
+            color: var(--accent-blue);
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 10px;
+            }
+
+            .content {
+                grid-template-columns: 1fr; 
+                gap: 20px;
+            }
+
+            .side-img-top {
+                grid-row: 1; 
+                height: 250px; 
+                min-height: auto;
+            }
+
+            .main-info h1 {
+                font-size: 1.8rem;
+                text-align: center;
+            }
+
+            .main-info p {
+                text-align: center;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .btn {
+                font-size: 0.75rem;
+                padding: 10px 8px;
+                gap: 6px;
+            }
+
+            .bottom-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .window-controls {
+                display: none; 
+            }
+
+            .tab {
+                width: auto;
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="browser-window">
+        <div class="tabs" id="tabs-container">
+            <div class="tab active">Главная</div>
+            <a href="my_project.html" class="tab">Мои проекты</a>
+            <div class="window-controls">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="address-bar">
+            <span class="nav-btn">&lt;</span>
+            <a href="my_project.html" class="nav-btn">&gt;</a>
+            <span class="nav-btn">&#x21bb;</span>
+            <input type="text" class="url-input" value="https://the-nexwayne.github.io" readonly>
+            <span class="nav-btn">&#128269;</span>
+        </div>
+
+        <div class="content">
+            <div class="main-info">
+                <h1>Nexwayne</h1>
+                <p>Добро пожаловать в мой профиль. Здесь собраны все актуальные контакты и социальные сети.</p>
+                <div class="links-grid">
+                    <a href="https://github.com/the-nexwayne" target="_blank" rel="noopener noreferrer" class="btn" title="the-nexwayne">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://huggingface.co/nexwayne" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne">
+                        <i class="fas fa-robot"></i> Hugging Face
+                    </a>
+                    <a href="https://t.me/nexwayne" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne">
+                        <i class="fab fa-telegram"></i> TG BIO
+                    </a>
+                    <a href="http://t.me/anonaskbot?start=5oj1oz8" target="_blank" rel="noopener noreferrer" class="btn" title="TG Anon Ask">
+                        <i class="fas fa-user-secret"></i> TG anon
+                    </a>
+                    <a href="https://www.tiktok.com/@nexwayne1" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne1">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://www.instagram.com/nexwayne1" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne1">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://discord.com/users/nexwayne" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne">
+                        <i class="fab fa-discord"></i> Discord
+                    </a>
+                    <a href="mailto:nexwayne@proton.me" target="_blank" rel="noopener noreferrer" class="btn" title="nexwayne@proton.mail">
+                        <i class="fas fa-envelope"></i> Proton Mail
+                    </a>
+                </div>
+            </div>
+
+            <div class="side-img-top">
+                <img src="photo/profile-photo.jpg" alt="Profile Photo">
+            </div>
+
+            <div class="bottom-row">
+                <div class="side-img-bottom" style="background-image: url('photo/error-bg.jpg');">
+                    <p style="color: var(--text-light); margin-bottom: 5px;">ERROR 404: freedom not found</p>
+                    <p>&gt; GOVERNMENTS NOW MONITOR EVERY MOVE YOU MAKE.</p>
+                    <p>&gt; MASS SURVEILLANCE IS NOT COMING   IT'S ALREADY HERE.</p>
+                    <p>&gt; CONTROL HAS SHIFTED FROM THE PEOPLE TO THE NETWORK.</p>
+                </div>
+
+                <div class="about-panel">
+                    <div class="about-header">
+                        <span>About Nexwayne</span>
+                        <span>&#x25BC;</span>
+                    </div>
+                    <p class="about-text">
+                        Привет! Я Nexwayne, родом из Гомеля (2012 г. р.). Занимаюсь селф-хостингом и Linux-системами, увлечён open-source софтом, фурри-культурой и обучением нейросетей.<br><br>
+                        <strong>MBTI:</strong> ISFP-T
+                    </p>
+                    <div class="action-btns">
+                        <button class="btn" onclick="playSound('block')">Block</button>
+                        <button class="btn btn-black" onclick="playSound('add')">+ Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="sound-block" src="mellstroi-otkazano.mp3" preload="auto"></audio>
+    <audio id="sound-add" src="mellstroi-ti-prosto-boss.mp3" preload="auto"></audio>
+
+    <script>
+        function playSound(type) {
+            let audio;
+            if (type === 'block') {
+                audio = document.getElementById('sound-block');
+            } else if (type === 'add') {
+                audio = document.getElementById('sound-add');
+            }
+            
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(error => console.log("Ошибка воспроизведения (возможно, нужен предварительный клик по странице):", error));
+            }
+        }
+    </script>
+</body>
+</html>
