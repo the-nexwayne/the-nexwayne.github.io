@@ -149,7 +149,7 @@
 
         .projects-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
         }
 
@@ -176,6 +176,22 @@
             color: var(--text-light);
             font-size: 0.85rem;
             line-height: 1.4;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .tag {
+            background-color: var(--window-bg);
+            color: var(--panel-light);
+            border: 1px solid var(--panel-brown);
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 3px;
         }
 
         .btn {
@@ -277,6 +293,29 @@
             </div>
 
             <div class="projects-grid">
+                <!-- Новый проект: nodalyze_engine -->
+                <div class="project-card">
+                    <div>
+                        <div class="project-title">
+                            <i class="fab fa-github"></i> nodalyze_engine
+                        </div>
+                        <br>
+                        <p class="project-desc">
+                            Модульный фреймворк для создания stateful ролевых ИИ-агентов и RP-движков.<br><br>
+                            Использует граф сцен (<code>networkx</code>) для детерминированных переходов без слома нарратива, Pydantic-валидацию с защитой от промпт-инъекций и отчистку системного жаргона в локальном Ollama/LLM окружении.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">Python 3.10+</span>
+                            <span class="tag">Ollama</span>
+                            <span class="tag">NetworkX</span>
+                            <span class="tag">Pydantic</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/the-nexwayne/nodalyze_engine" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top: 12px;">
+                        Открыть на GitHub <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
                 <div class="project-card">
                     <div>
                         <div class="project-title">
